@@ -127,8 +127,12 @@ app.get('/api/users/:_id/logs', async (req, res) => {
 
 app.get('/api/users', async (req, res) => {
   try {
-    const users = await User.find({}, 'username_id'); // Fetch all users
-    res.json(users); // Send the array as the response
+    const users = await User.find({}, 'username _id'); // Fetch all users, selecting only username and _id
+    const formattedUsers = users.map(user => ({
+      username: user.username,
+      _id: user._id.toString() // Explicitly convert _id to string
+    }));
+    res.json(formattedUsers); // Send the array of users as the response
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
